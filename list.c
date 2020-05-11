@@ -1,112 +1,119 @@
 /*
-  file: list.c
+file: list.c
 */
 #include "list.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-
-static Node * Node_construct(int v)
+static Node *Node_construct(int v)
 /*
-  A static function can be called by functions only in 
-  this file. Functions outside this file cannot call it.
- */
+A static function can be called by functions only in
+this file. Functions outside this file cannot call it.
+*/
 {
-  Node * n = malloc(sizeof(Node));
-  n -> value = v;
-  n -> next = NULL;
+  Node *n = malloc(sizeof(Node));
+  n->value = v;
+  n->next = NULL;
   return n;
 }
 
-Node * List_insert_Last(Node *head, int v)
-{
-  printf("inserting node %d at the end of the list\n", v);
-  Node *p = Node_construct(v);
-  Node *node = head;
-  if (node == NULL)
-    return p;
-  while (node->next != NULL)
-  {
-    node = node->next;
-  }
-  node->next = p;
-  return node;
-}
-
-Node * List_insert(Node * head, int v)
+Node *List_insert(Node *head, int v)
 {
   printf("insert %d\n", v);
-  Node * p = Node_construct(v); 
-  p -> next = head;
-  return p;   /* insert at the beginning */
+  Node *p = Node_construct(v);
+  p->next = head;
+  return p; /* insert at the beginning */
 }
 
-Node * List_search(Node * head, int v)
+Node *List_insert_last(Node *head, int v)
 {
-  Node * p = head;
-  while (p != NULL)
+  printf("insert %d to end", v);
+  Node *p = Node_construct(v);
+  if (head->next == NULL)
+  {
+    head->next = p;
+  }
+  else
+  {
+    Node *current = head;
+    while (1)
     {
-      if ((p -> value) == v)
-	{
-	  return p;
-	}
-      p = p -> next;
-    }
+      if (current->next == NULL)
+      {
+        current->next = p;
+        break;
+      }
+      current = current->next;
+    };
+  }
   return p;
 }
 
-Node * List_delete(Node * head, int v)
+Node *List_search(Node *head, int v)
+{
+  Node *p = head;
+  while (p != NULL)
+  {
+    if ((p->value) == v)
+    {
+      return p;
+    }
+    p = p->next;
+  }
+  return p;
+}
+
+Node *List_delete(Node *head, int v)
 {
   printf("delete %d\n", v);
-  Node * p = head;
+  Node *p = head;
   if (p == NULL) /* empty list, do nothing */
-    {
-      return p;
-    }
+  {
+    return p;
+  }
   /* delete the first node (i.e. head node)? */
-  if ((p -> value) == v)
-    {
-      p = p -> next;
-      free (head);
-      return p;
-    }
+  if ((p->value) == v)
+  {
+    p = p->next;
+    free(head);
+    return p;
+  }
 
   /* not deleting the first node */
 
-  Node * q = p -> next;
-  while ((q != NULL) && ((q -> value) != v))
-    {
-      /* must check whether q is NULL 
-	 before checking q -> value */
-      p = p -> next;
-      q = q -> next;
-    }
-  if (q != NULL) 
-    { 
-      /* find a node whose value is v */
-      p -> next = q -> next;
-      free (q);
-    }
-  return head; 
+  Node *q = p->next;
+  while ((q != NULL) && ((q->value) != v))
+  {
+    /* must check whether q is NULL
+before checking q -> value */
+    p = p->next;
+    q = q->next;
+  }
+  if (q != NULL)
+  {
+    /* find a node whose value is v */
+    p->next = q->next;
+    free(q);
+  }
+  return head;
 }
 
-void List_destroy(Node * head)
+void List_destroy(Node *head)
 {
   while (head != NULL)
-    {
-      Node * p = head -> next;
-      free (head);
-      head = p;
-    }
+  {
+    Node *p = head->next;
+    free(head);
+    head = p;
+  }
 }
 
-void List_print(Node * head)
+void List_print(Node *head)
 {
   printf("\nPrint the whole list:\n");
   while (head != NULL)
-    {
-      printf("%d ", head -> value);
-      head = head -> next;
-    }
+  {
+    printf("%d ", head->value);
+    head = head->next;
+  }
   printf("\n\n");
 }
